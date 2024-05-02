@@ -1,0 +1,109 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Producto{
+  idProducto Int @default(autoincrement()) @id
+  nombre String
+  descripcion String
+  precio Decimal
+  Codigo String
+  inventario Inventario[]
+}
+
+model Compra{
+  idCompra Int @default(autoincrement()) @id
+  precio Decimal
+  cantidad Int
+  fecha DateTime
+}
+
+model Proveedor{
+  idProveedor Int @default(autoincrement()) @id
+  nombre String
+  telefono String
+  ruc String
+  cantMinina String
+  inventario Inventario[]
+}
+
+model Categoria{
+  idCategoria Int @default(autoincrement()) @id
+  nombre String
+}
+
+model Impuesto{
+  idImpuesto Int @default(autoincrement()) @id
+  descripcion String
+  valor Decimal
+}
+model DetalleVenta{
+  idDetalle Int @default(autoincrement()) @id
+  Venta Venta @relation(fields: [ventaId], references: [idVenta])
+  ventaId Int
+}
+
+model Venta{
+  idVenta Int @default(autoincrement()) @id
+  numeroBoleta String
+  subtotal Decimal
+  total Decimal
+  igv Decimal
+  detalles DetalleVenta[]
+  factura Factura[]
+}
+
+model Cliente{
+  idCliente Int @default(autoincrement()) @id
+  dni String
+  nombre String
+  apePaterno String
+  apeMaterno String
+  razonSocial String
+}
+
+model Factura{
+  idFactura Int @default(autoincrement()) @id
+  fecha DateTime
+  total Decimal
+  venta Venta @relation(fields: [VentaId],references: [idVenta])
+  VentaId Int
+  usuario Usuario @relation(fields: [UsuarioId],references: [idUsuario])
+  UsuarioId Int
+}
+
+model Inventario{
+  idInventario Int @default(autoincrement()) @id
+  producto Producto @relation(fields: [productoId],references: [idProducto])
+  productoId Int
+  stock Int
+  entrada Int
+  salida Int
+  proveedor Proveedor @relation(fields: [proveedorId],references: [idProveedor])
+  proveedorId Int
+  fechEntr DateTime
+  
+}
+
+model Rol {
+  idRol Int @default(autoincrement()) @id
+  nombre String
+  users Usuario[]
+}
+
+model Usuario {
+  idUsuario Int @default(autoincrement()) @id
+  nombre String
+  rol Rol @relation(fields: [rolId], references: [idRol])
+  rolId Int
+  usuario String
+  pass String
+  factura Factura[]
+}
+
+

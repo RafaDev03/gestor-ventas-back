@@ -7,11 +7,11 @@ import { Usuario, Prisma } from '@prisma/client';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async getAllTasks(): Promise<Usuario[]> {
+  async getAllUsers(): Promise<Usuario[]> {
     return this.prisma.usuario.findMany();
   }
 
-  async getTaskById(id: number): Promise<Usuario> {
+  async getUserById(id: number): Promise<Usuario> {
     return this.prisma.usuario.findUnique({
       where: {
         idUsuario: id,
@@ -19,13 +19,13 @@ export class UsersService {
     });
   }
 
-  async createTask(data: Usuario): Promise<Usuario> {
+  async createUser(data: Usuario): Promise<Usuario> {
     return this.prisma.usuario.create({
       data,
     });
   }
 
-  async updateTask(id: number, data: Usuario): Promise<Usuario> {
+  async updateUser(id: number, data: Usuario): Promise<Usuario> {
     return this.prisma.usuario.update({
       where: {
         idUsuario: id,
@@ -41,4 +41,14 @@ export class UsersService {
       },
     });
   }
+
+  async findOneByNameUSer(nameUser: string): Promise<Usuario> {
+    return this.prisma.usuario.findFirst({
+      where:{
+        usuario: nameUser,
+      },
+    });
+}
+
+  
 }
